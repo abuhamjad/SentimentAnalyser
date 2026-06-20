@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sentiment Analyser</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<nav>
+
+    <div class="nav-left">
+        <span class="tool">TOOL</span>
+        <span class="dot">•</span>
+        <span>Sentiment Analyser</span>
+    </div>
+
+    <div class="version">
+        V1.0
+    </div>
+
+</nav>
+
+<main>
+
+    <section class="hero">
+
+        <h1>
+            How does<br>
+            your text feel?
+        </h1>
+
+        <p>
+            Paste any text below. The engine reads 
+            emotional tone and surfaces the words doing 
+            the work.
+        </p>
+
+    </section>
+
+    <form method="POST">
+    <section class="input-card">
+
+        <textarea
+            id="textInput"
+            name="text"
+            placeholder="Paste or type any text — a review, an email, a tweet, a journal entry — and see the emotional tone reading."
+        ></textarea>
+
+        <div class="bottom-bar">
+
+            <span id="wordCount">0 words</span>
+
+            <div class="actions">
+
+                <button id="clearBtn" class="hidden">
+                    CLEAR
+                </button>
+
+                <button
+                    id="analyseBtn"
+                    type="submit"
+                    disabled>
+                    ANALYSE
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+    </form>
+
+    <section class="examples">
+
+        <button class="example-btn"
+                data-text="I absolutely love this product. It is amazing.">
+            try positive →
+        </button>
+
+        <button class="example-btn"
+                data-text="This is terrible and I hate every second of it.">
+            try negative →
+        </button>
+
+        <button class="example-btn"
+                data-text="The product is good but the delivery was slow.">
+            try mixed →
+        </button>
+
+    </section>
+
+    {% if result %}
+
+    <section class="result-card {{ result.color }}">
+
+        <div class="result-header">
+
+            <div>
+
+                <p class="label">
+                    DETECTED TONE
+                </p>
+
+                <h2>
+                    {{ result.sentiment }}
+                </h2>
+
+            </div>
+
+            <div class="confidence">
+
+                <p class="label">
+                    CONFIDENCE
+                </p>
+
+                <h3>
+                    {{ result.confidence }}%
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="progress-line">
+
+            <div
+                class="progress-fill"
+                style="width: {{ result.confidence }}%;">
+            </div>
+
+        </div>
+
+        <div class="signals">
+
+            <p class="label">
+                SIGNAL WORDS
+            </p>
+
+            {% for word in result.signals %}
+
+            <span class="tag">
+                {{ word }}
+            </span>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="stats">
+
+            {{ result.tokens }} tokens scanned
+
+            &nbsp;&nbsp;&nbsp;
+
+            {{ result.positive_count }} positive
+
+            &nbsp;&nbsp;&nbsp;
+
+            {{ result.negative_count }} negative
+
+            &nbsp;&nbsp;&nbsp;
+
+            polarity {{ result.polarity }}
+
+            &nbsp;&nbsp;&nbsp;
+
+            subjectivity {{ result.subjectivity }}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</main>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>
